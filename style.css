@@ -25,6 +25,7 @@ h1 {
   gap: 8px;
   justify-content: center;
   margin: 20px auto;
+  max-width: 320px;
 }
 
 .tile {
