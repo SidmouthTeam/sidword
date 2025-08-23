@@ -19,11 +19,13 @@ let currentGuess = "";
 let currentRow = 0;
 
 function createBoard() {
-  for (let i = 0; i < 5; i++) {
-    const tile = document.createElement("div");
-    tile.className = "tile";
-    tile.id = `tile-${currentRow}-${i}`;
-    board.appendChild(tile);
+  for (let row = 0; row < 6; row++) {
+    for (let col = 0; col < 5; col++) {
+      const tile = document.createElement("div");
+      tile.className = "tile";
+      tile.id = `tile-${row}-${col}`;
+      board.appendChild(tile);
+    }
   }
 }
 
@@ -86,12 +88,14 @@ function submitGuess() {
 
   if (currentGuess === todayWord) {
     fact.textContent = `🎉 You got it! ${todayFact}`;
-  } else {
-    fact.textContent = `❌ Try again tomorrow! The word was ${todayWord}. ${todayFact}`;
+    shareButton.style.display = "inline-block";
+  } else if (currentRow === 5) {
+    fact.textContent = `❌ Out of guesses! The word was ${todayWord}. ${todayFact}`;
+    shareButton.style.display = "inline-block";
   }
 
-  shareButton.style.display = "inline-block";
   currentGuess = "";
+  currentRow++;
 }
 
 shareButton.onclick = () => {
