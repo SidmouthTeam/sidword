@@ -1,140 +1,68 @@
 body {
-  font-family: 'Segoe UI', sans-serif;
-  background-color: #f9f9f9;
-  margin: 0;
-  padding: 0;
+  font-family: sans-serif;
   text-align: center;
-  color: #333;
-}
-
-h1 {
-  margin-top: 20px;
-  font-size: 2em;
-  color: #2c3e50;
-}
-
-#game-container {
-  max-width: 400px;
-  margin: 0 auto;
+  background: #f4f4f4;
+  margin: 0;
   padding: 20px;
 }
 
-#board {
+#game-board {
+  display: grid;
+  grid-template-rows: repeat(6, 1fr);
+  gap: 5px;
+  margin-bottom: 20px;
+}
+
+.tile-row {
   display: grid;
   grid-template-columns: repeat(5, 1fr);
-  gap: 8px;
+  gap: 5px;
   justify-content: center;
-  margin: 20px auto;
-  max-width: 320px;
 }
 
 .tile {
-  width: 60px;
-  height: 60px;
-  font-size: 2em;
-  line-height: 60px;
-  text-align: center;
-  border: 2px solid #ccc;
-  background-color: #fff;
-  box-sizing: border-box;
+  width: 50px;
+  height: 50px;
+  background: #ddd;
+  font-size: 24px;
+  font-weight: bold;
+  line-height: 50px;
   text-transform: uppercase;
+  border: 2px solid #999;
 }
 
 .correct {
-  background-color: #6aaa64;
-  color: #fff;
-  border: none;
+  background: #6aaa64;
+  color: white;
 }
 
 .present {
-  background-color: #c9b458;
-  color: #fff;
-  border: none;
+  background: #c9b458;
+  color: white;
 }
 
 .absent {
-  background-color: #787c7e;
-  color: #fff;
-  border: none;
+  background: #787c7e;
+  color: white;
 }
 
 #keyboard {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
+  gap: 5px;
   justify-content: center;
-  gap: 6px;
-  margin: 20px auto;
-  max-width: 360px;
+  align-items: center;
+}
+
+.key-row {
+  display: flex;
+  gap: 5px;
 }
 
 .key {
-  padding: 10px 14px;
-  background-color: #ddd;
-  border-radius: 4px;
-  font-weight: bold;
-  text-transform: uppercase;
-  cursor: pointer;
-  user-select: none;
-  border: none;
-}
-
-.key.correct {
-  background-color: #6aaa64;
-  color: white;
-}
-
-.key.present {
-  background-color: #c9b458;
-  color: white;
-}
-
-.key.absent {
-  background-color: #787c7e;
-  color: white;
-}
-
-.key:hover {
-  background-color: #bbb;
-}
-
-#fact {
-  margin-top: 20px;
-  font-size: 1em;
-  color: #444;
   padding: 10px;
-  background-color: #eef;
-  border-radius: 6px;
-}
-
-#share-button {
-  margin-top: 20px;
-  padding: 10px 16px;
-  background-color: #25D366;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-weight: bold;
+  font-size: 16px;
+  background: #eee;
+  border: 1px solid #999;
   cursor: pointer;
-}
-
-#share-button:hover {
-  background-color: #1ebe5d;
-}
-
-@media (max-width: 500px) {
-  .tile {
-    width: 48px;
-    height: 48px;
-    font-size: 1.5em;
-    line-height: 48px;
-  }
-
-  .key {
-    padding: 8px 10px;
-    font-size: 0.9em;
-  }
-
-  #game-container {
-    padding: 10px;
-  }
 }
