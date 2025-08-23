@@ -1,35 +1,104 @@
-// Basic Sidword setup (simplified for demo)
+const wordList = [
+  { word: "combe", fact: "A combe is a deep valley, often found in Devon." },
+  { word: "otter", fact: "The River Otter flows through East Devon and into the sea at Budleigh Salterton." },
+  { word: "cream", fact: "Devon is famous for its clotted cream — always cream first, then jam!" },
+  { word: "beach", fact: "Sidmouth’s red cliffs and pebble beach are part of the Jurassic Coast." },
+  { word: "pubby", fact: "‘Pubby’ is a local slang for someone who’s always down the pub." }
+];
+
+const todayIndex = new Date().getDate() % wordList.length;
+const todayWord = wordList[todayIndex].word.toUpperCase();
+const todayFact = wordList[todayIndex].fact;
+
 const board = document.getElementById("board");
 const keyboard = document.getElementById("keyboard");
-const message = document.getElementById("message");
+const fact = document.getElementById("fact");
+const shareButton = document.getElementById("share-button");
+
+let currentGuess = "";
+let currentRow = 0;
 
 function createBoard() {
-  board.innerHTML = "<p>🧠 Guess the Devon-themed word!</p>";
+  for (let i = 0; i < 5; i++) {
+    const tile = document.createElement("div");
+    tile.className = "tile";
+    tile.id = `tile-${currentRow}-${i}`;
+    board.appendChild(tile);
+  }
 }
 
 function createKeyboard() {
-  const keys = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("");
-  keys.forEach(letter => {
-    const btn = document.createElement("button");
-    btn.textContent = letter;
-    btn.onclick = () => handleKey(letter);
-    keyboard.appendChild(btn);
+  const keys = "QWERTYUIOPASDFGHJKLZXCVBNM";
+  keys.split("").forEach(letter => {
+    const key = document.createElement("button");
+    key.className = "key";
+    key.textContent = letter;
+    key.onclick = () => handleKey(letter);
+    keyboard.appendChild(key);
   });
+
+  const enterKey = document.createElement("button");
+  enterKey.className = "key";
+  enterKey.textContent = "ENTER";
+  enterKey.onclick = submitGuess;
+  keyboard.appendChild(enterKey);
+
+  const deleteKey = document.createElement("button");
+  deleteKey.className = "key";
+  deleteKey.textContent = "DEL";
+  deleteKey.onclick = deleteLetter;
+  keyboard.appendChild(deleteKey);
 }
 
 function handleKey(letter) {
-  message.textContent = `You pressed: ${letter}`;
+  if (currentGuess.length < 5) {
+    currentGuess += letter;
+    updateBoard();
+  }
 }
 
-// WhatsApp Share Button
-document.getElementById("shareBtn").addEventListener("click", function () {
-  const gameURL = window.location.href;
-  const messageText = `Try today's Sidword! 🧠🌊\nCan you guess the Devon-themed word?\n${gameURL}`;
-  const encodedMessage = encodeURIComponent(messageText);
-  const whatsappURL = `https://wa.me/?text=${encodedMessage}`;
-  window.open(whatsappURL, "_blank");
-});
+function deleteLetter() {
+  currentGuess = currentGuess.slice(0, -1);
+  updateBoard();
+}
 
-// Initialize game
+function updateBoard() {
+  for (let i = 0; i < 5; i++) {
+    const tile = document.getElementById(`tile-${currentRow}-${i}`);
+    tile.textContent = currentGuess[i] || "";
+  }
+}
+
+function submitGuess() {
+  if (currentGuess.length !== 5) return;
+
+  for (let i = 0; i < 5; i++) {
+    const tile = document.getElementById(`tile-${currentRow}-${i}`);
+    const letter = currentGuess[i];
+    if (letter === todayWord[i]) {
+      tile.classList.add("correct");
+    } else if (todayWord.includes(letter)) {
+      tile.classList.add("present");
+    } else {
+      tile.classList.add("absent");
+    }
+  }
+
+  if (currentGuess === todayWord) {
+    fact.textContent = `🎉 You got it! ${todayFact}`;
+  } else {
+    fact.textContent = `❌ Try again tomorrow! The word was ${todayWord}. ${todayFact}`;
+  }
+
+  shareButton.style.display = "inline-block";
+  currentGuess = "";
+}
+
+shareButton.onclick = () => {
+  const message = `Today's Sidword was "${todayWord}" — ${todayFact}`;
+  const encoded = encodeURIComponent(message);
+  window.open(`https://wa.me/?text=${encoded}`, "_blank");
+};
+
 createBoard();
 createKeyboard();
