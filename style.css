@@ -1,44 +1,131 @@
+/* Reset and base styles */
 body {
-  font-family: Arial, sans-serif;
-  background-color: #f0f4f8;
+  font-family: 'Segoe UI', sans-serif;
+  background-color: #f9f9f9;
   margin: 0;
-  padding: 20px;
+  padding: 0;
   text-align: center;
-}
-
-#game {
-  max-width: 600px;
-  margin: auto;
-}
-
-#board {
-  margin: 20px 0;
-  min-height: 200px;
-  border: 2px solid #ccc;
-  padding: 10px;
-}
-
-#keyboard {
-  margin: 20px 0;
-}
-
-#message {
-  margin: 10px 0;
-  font-weight: bold;
   color: #333;
 }
 
-#shareBtn {
+h1 {
+  margin-top: 20px;
+  font-size: 2em;
+  color: #2c3e50;
+}
+
+#game-container {
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+/* Board layout */
+#board {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  justify-content: center;
+  margin: 20px auto;
+}
+
+.tile {
+  width: 60px;
+  height: 60px;
+  font-size: 2em;
+  line-height: 60px;
+  text-align: center;
+  border: 2px solid #ccc;
+  background-color: #fff;
+  box-sizing: border-box;
+  text-transform: uppercase;
+}
+
+/* Tile feedback colors */
+.correct {
+  background-color: #6aaa64;
+  color: #fff;
+  border: none;
+}
+
+.present {
+  background-color: #c9b458;
+  color: #fff;
+  border: none;
+}
+
+.absent {
+  background-color: #787c7e;
+  color: #fff;
+  border: none;
+}
+
+/* Keyboard layout */
+#keyboard {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  margin: 20px auto;
+  max-width: 360px;
+}
+
+.key {
+  padding: 10px 14px;
+  background-color: #ddd;
+  border-radius: 4px;
+  font-weight: bold;
+  text-transform: uppercase;
+  cursor: pointer;
+  user-select: none;
+  border: none;
+}
+
+.key:hover {
+  background-color: #bbb;
+}
+
+/* Fact display */
+#fact {
+  margin-top: 20px;
+  font-size: 1em;
+  color: #444;
+  padding: 10px;
+  background-color: #eef;
+  border-radius: 6px;
+}
+
+/* Share button */
+#share-button {
   margin-top: 20px;
   padding: 10px 16px;
   background-color: #25D366;
   color: white;
   border: none;
   border-radius: 6px;
-  font-size: 16px;
+  font-weight: bold;
   cursor: pointer;
 }
 
-#shareBtn:hover {
+#share-button:hover {
   background-color: #1ebe5d;
+}
+
+/* Responsive tweaks */
+@media (max-width: 500px) {
+  .tile {
+    width: 48px;
+    height: 48px;
+    font-size: 1.5em;
+    line-height: 48px;
+  }
+
+  .key {
+    padding: 8px 10px;
+    font-size: 0.9em;
+  }
+
+  #game-container {
+    padding: 10px;
+  }
 }
