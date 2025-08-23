@@ -80,28 +80,31 @@ document.addEventListener("DOMContentLoaded", () => {
       const letter = currentGuess[i];
       tile.textContent = letter;
 
+      let status;
       if (letter === todayWord[i]) {
-        tile.classList.add("correct");
+        status = "correct";
       } else if (todayWord.includes(letter)) {
-        tile.classList.add("present");
+        status = "present";
       } else {
-        tile.classList.add("absent");
+        status = "absent";
       }
+
+      tile.classList.add(status);
 
       const keyButton = [...keyboard.children].find(btn => btn.textContent === letter);
       if (keyButton) {
-        if (letter === todayWord[i]) {
-          keyButton.classList.remove("present", "absent");
-          keyButton.classList.add("correct");
-        } else if (todayWord.includes(letter)) {
-          if (!keyButton.classList.contains("correct")) {
-            keyButton.classList.remove("absent");
-            keyButton.classList.add("present");
-          }
-        } else {
-          if (!keyButton.classList.contains("correct") && !keyButton.classList.contains("present")) {
-            keyButton.classList.add("absent");
-          }
+        const currentStatus = keyButton.classList.contains("correct")
+          ? "correct"
+          : keyButton.classList.contains("present")
+          ? "present"
+          : keyButton.classList.contains("absent")
+          ? "absent"
+          : null;
+
+        const priority = { correct: 3, present: 2, absent: 1 };
+        if (!currentStatus || priority[status] > priority[currentStatus]) {
+          keyButton.classList.remove("correct", "present", "absent");
+          keyButton.classList.add(status);
         }
       }
     }
