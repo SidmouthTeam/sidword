@@ -63,7 +63,7 @@ keyboard.appendChild(controlRow);
 
 // Handle key input
 function handleKey(letter) {
-  if (currentCol < maxCols) {
+  if (currentCol < maxCols && currentRow < maxRows) {
     board[currentRow][currentCol].textContent = letter;
     currentCol++;
   }
