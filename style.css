@@ -2,48 +2,56 @@ body {
   font-family: sans-serif;
   text-align: center;
   background: #f4f4f4;
+  margin: 0;
   padding: 20px;
 }
 
+h1 {
+  margin-bottom: 20px;
+}
+
 #game-board {
-  display: grid;
-  grid-template-rows: repeat(6, 1fr);
+  display: flex;
+  flex-direction: column;
   gap: 5px;
   margin-bottom: 20px;
+  align-items: center;
 }
 
 .tile-row {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(5, 50px);
   gap: 5px;
-  justify-content: center;
 }
 
 .tile {
   width: 50px;
   height: 50px;
-  background: #ddd;
+  border: 2px solid #999;
+  background: #fff;
   font-size: 24px;
   font-weight: bold;
-  line-height: 50px;
   text-transform: uppercase;
-  border: 2px solid #999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 #keyboard {
   display: flex;
   flex-direction: column;
   gap: 5px;
-  justify-content: center;
   align-items: center;
 }
 
 .key-row {
   display: flex;
   gap: 5px;
+  justify-content: center;
 }
 
 .key {
+  min-width: 40px;
   padding: 10px;
   font-size: 16px;
   background: #eee;
