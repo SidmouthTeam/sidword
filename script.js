@@ -2,15 +2,20 @@ let validWords = [];
 let currentRow = 0;
 let currentTile = 0;
 let currentGuess = "";
+let targetWord = "";
 const board = document.getElementById("game-board");
 const keyboard = document.getElementById("keyboard");
 const fact = document.getElementById("fact");
 
-// Load word list
+// Load word list and pick daily word
 fetch('words.json')
   .then(response => response.json())
   .then(data => {
     validWords = data.validWords;
+    const seed = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
+    const index = seed.split("-").reduce((a, b) => a + b.charCodeAt(0), 0) % validWords.length;
+    targetWord = validWords[index];
+    console.log("Today's word:", targetWord); // For testing
   })
   .catch(error => {
     console.error("Failed to load word list:", error);
@@ -29,12 +34,7 @@ for (let i = 0; i < 6; i++) {
 }
 
 // Create keyboard
-const keys = [
-  "QWERTYUIOP",
-  "ASDFGHJKL",
-  "ZXCVBNM"
-];
-
+const keys = ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"];
 keys.forEach(row => {
   const keyRow = document.createElement("div");
   keyRow.classList.add("key-row");
@@ -59,7 +59,6 @@ function handleKey(letter) {
   }
 }
 
-// Submit guess
 document.addEventListener("keydown", e => {
   if (e.key === "Enter") submitGuess();
   if (e.key === "Backspace") deleteLetter();
@@ -87,8 +86,28 @@ function submitGuess() {
     return;
   }
 
-  fact.textContent = `✅ "${currentGuess}" is valid!`;
-  currentRow++;
-  currentTile = 0;
-  currentGuess = "";
+  const row = board.children[currentRow];
+  const guessArray = currentGuess.toLowerCase().split("");
+  const targetArray = targetWord.toLowerCase().split("");
+
+  guessArray.forEach((letter, i) => {
+    const tile = row.children[i];
+    if (letter === targetArray[i]) {
+      tile.classList.add("correct");
+    } else if (targetArray.includes(letter)) {
+      tile.classList.add("present");
+    } else {
+      tile.classList.add("absent");
+    }
+  });
+
+  if (currentGuess.toLowerCase() === targetWord.toLowerCase()) {
+    fact.textContent = `🎉 You guessed it! "${targetWord}"`;
+  } else if (currentRow === 5) {
+    fact.textContent = `☠️ Out of tries! The word was "${targetWord}"`;
+  } else {
+    currentRow++;
+    currentTile = 0;
+    currentGuess = "";
+  }
 }
