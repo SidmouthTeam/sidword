@@ -1,125 +1,95 @@
-const gameBoard = document.getElementById("game-board");
-const keyboard = document.getElementById("keyboard");
-const factBox = document.getElementById("fact");
+const validWords = wordData.validWords;
+const targetWord = getDailyWord(validWords);
+let currentGuess = "";
 
-const targetWord = "CRISP"; // Replace with dynamic word logic later
-const devonFacts = {
-  "CRISP": "Sidmouth’s sea air is famously crisp and refreshing — perfect for a coastal walk.",
-  // Add more word-fact pairs here
-};
-
-let currentRow = 0;
-let currentCol = 0;
-const maxRows = 6;
-const maxCols = 5;
-const board = [];
-
-const keyMap = {};
-
-// Create board
-for (let r = 0; r < maxRows; r++) {
-  const row = [];
-  const rowDiv = document.createElement("div");
-  rowDiv.classList.add("tile-row");
-
-  for (let c = 0; c < maxCols; c++) {
-    const tile = document.createElement("div");
-    tile.classList.add("tile");
-    rowDiv.appendChild(tile);
-    row.push(tile);
-  }
-
-  gameBoard.appendChild(rowDiv);
-  board.push(row);
+function getDailyWord(wordList) {
+  const today = new Date();
+  const seed = today.getFullYear() * 10000 + (today.getMonth() + 1) * 100 + today.getDate();
+  const index = seed % wordList.length;
+  return wordList[index];
 }
 
-// Create keyboard
-const keys = ["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"];
+function renderKeyboard() {
+  const keyboardLayout = [
+    ["A", "B", "C", "D", "E", "F", "G", "H", "I"],
+    ["J", "K", "L", "M", "N", "O", "P", "Q", "R"],
+    ["S", "T", "U", "V", "W", "X", "Y", "Z"]
+  ];
 
-keys.forEach(row => {
-  const keyRow = document.createElement("div");
-  keyRow.classList.add("key-row");
+  const keyboardContainer = document.getElementById("keyboard");
+  keyboardContainer.innerHTML = "";
 
-  row.split("").forEach(letter => {
-    const key = document.createElement("button");
-    key.textContent = letter;
-    key.classList.add("key");
-    key.onclick = () => handleKey(letter);
-    keyRow.appendChild(key);
-    keyMap[letter] = key;
+  keyboardLayout.forEach(row => {
+    const rowDiv = document.createElement("div");
+    rowDiv.classList.add("keyboard-row");
+
+    row.forEach(letter => {
+      const key = document.createElement("button");
+      key.textContent = letter;
+      key.classList.add("key");
+      key.setAttribute("data-key", letter);
+      key.addEventListener("click", handleKeyClick);
+      rowDiv.appendChild(key);
+    });
+
+    keyboardContainer.appendChild(rowDiv);
   });
 
-  keyboard.appendChild(keyRow);
-});
-
-// Add Enter and Delete
-const controlRow = document.createElement("div");
-controlRow.classList.add("key-row");
-
-const enterKey = document.createElement("button");
-enterKey.textContent = "ENTER";
-enterKey.classList.add("key");
-enterKey.onclick = submitGuess;
-controlRow.appendChild(enterKey);
-
-const deleteKey = document.createElement("button");
-deleteKey.textContent = "DEL";
-deleteKey.classList.add("key");
-deleteKey.onclick = deleteLetter;
-controlRow.appendChild(deleteKey);
-
-keyboard.appendChild(controlRow);
-
-function handleKey(letter) {
-  if (currentCol < maxCols && currentRow < maxRows) {
-    board[currentRow][currentCol].textContent = letter;
-    currentCol++;
-  }
+  // Add Enter and Backspace
+  ["Enter", "←"].forEach(label => {
+    const key = document.createElement("button");
+    key.textContent = label;
+    key.classList.add("key", "special-key");
+    key.setAttribute("data-key", label);
+    key.addEventListener("click", handleKeyClick);
+    keyboardContainer.appendChild(key);
+  });
 }
 
-function deleteLetter() {
-  if (currentCol > 0) {
-    currentCol--;
-    board[currentRow][currentCol].textContent = "";
+function handleKeyClick(e) {
+  const key = e.target.getAttribute("data-key");
+
+  if (key === "←") {
+    currentGuess = currentGuess.slice(0, -1);
+  } else if (key === "Enter") {
+    submitGuess();
+  } else if (currentGuess.length < 5) {
+    currentGuess += key.toLowerCase();
   }
+
+  updateBoard();
+}
+
+function updateBoard() {
+  const board = document.getElementById("game-board");
+  board.textContent = currentGuess;
 }
 
 function submitGuess() {
-  if (currentCol !== maxCols) return;
+  if (currentGuess.length !== 5) return;
 
-  const guess = board[currentRow].map(tile => tile.textContent).join("");
-  const targetArray = targetWord.split("");
-  const guessArray = guess.split("");
+  if (!validWords.includes(currentGuess)) {
+    alert("Not a valid Devon word!");
+    return;
+  }
 
-  // First pass: correct letters
-  guessArray.forEach((letter, i) => {
-    const tile = board[currentRow][i];
-    if (letter === targetArray[i]) {
-      tile.classList.add("correct");
-      keyMap[letter]?.classList.add("correct");
-      targetArray[i] = null;
-      guessArray[i] = null;
-    }
-  });
+  if (currentGuess === targetWord) {
+    document.getElementById("fact-box").textContent = devonFacts[targetWord] || "You got it!";
+  } else {
+    alert("Try again!");
+  }
 
-  // Second pass: present and absent
-  guessArray.forEach((letter, i) => {
-    if (!letter) return;
-    const tile = board[currentRow][i];
-    const index = targetArray.indexOf(letter);
-    if (index !== -1) {
-      tile.classList.add("present");
-      keyMap[letter]?.classList.add("present");
-      targetArray[index] = null;
-    } else {
-      tile.classList.add("absent");
-      keyMap[letter]?.classList.add("absent");
-    }
-  });
-
-  // Show Devon fact
-  factBox.textContent = devonFacts[guess] || "";
-
-  currentRow++;
-  currentCol = 0;
+  currentGuess = "";
+  updateBoard();
 }
+
+const devonFacts = {
+  "otter": "The River Otter is home to wild beavers.",
+  "cream": "Devon cream tea: jam first, cream second.",
+  "sheep": "Dartmoor sheep roam freely across the moor.",
+  "cider": "Devon cider is traditionally made from local apples.",
+  "combe": "A combe is a deep valley — common in Devon place names."
+};
+
+renderKeyboard();
+updateBoard();
