@@ -1,72 +1,37 @@
 body {
   font-family: sans-serif;
   text-align: center;
-  background: #f4f4f4;
+  padding: 10px;
 }
 
-.tile-row {
+#game-board {
+  font-size: 24px;
+  margin: 20px 0;
+}
+
+.keyboard-row {
   display: flex;
   justify-content: center;
-  margin: 5px 0;
-}
-
-.tile {
-  width: 40px;
-  height: 40px;
-  margin: 2px;
-  border: 2px solid #ccc;
-  font-size: 24px;
-  font-weight: bold;
-  text-transform: uppercase;
-  line-height: 40px;
-  background-color: white;
-}
-
-.correct {
-  background-color: #6aaa64;
-  color: white;
-  border-color: #6aaa64;
-}
-
-.present {
-  background-color: #c9b458;
-  color: white;
-  border-color: #c9b458;
-}
-
-.absent {
-  background-color: #787c7e;
-  color: white;
-  border-color: #787c7e;
-}
-
-.key-row {
-  margin: 5px 0;
+  margin-bottom: 5px;
 }
 
 .key {
+  width: 32px;
+  height: 40px;
   margin: 2px;
-  padding: 10px;
   font-size: 16px;
-  text-transform: uppercase;
+  border-radius: 4px;
+  background-color: #eee;
+  border: 1px solid #ccc;
+  cursor: pointer;
 }
 
-.key.correct {
-  background-color: #6aaa64;
-  color: white;
+.special-key {
+  width: 60px;
+  background-color: #ddd;
 }
 
-.key.present {
-  background-color: #c9b458;
-  color: white;
-}
-
-.key.absent {
-  background-color: #787c7e;
-  color: white;
-}
-
-#fact {
+#fact-box {
   margin-top: 20px;
   font-style: italic;
 }
