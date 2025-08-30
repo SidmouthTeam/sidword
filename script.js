@@ -1,3 +1,5 @@
+document.body.insertAdjacentHTML("beforeend", "<p>Script is running ✅</p>");
+
 const validWords = wordData.validWords;
 const targetWord = getDailyWord(validWords);
 let currentGuess = "";
